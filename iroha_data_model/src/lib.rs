@@ -22,12 +22,8 @@ pub mod expression;
 pub mod isi;
 pub mod query;
 
-use iroha_introspect::{Introspect, derive::Introspect};
 
-#[test]
-fn foo() {
 
-}
 
 /// `Name` struct represents type for Iroha Entities names, like `Domain`'s name or `Account`'s
 /// name.
@@ -552,6 +548,7 @@ pub mod account {
 
     use std::ops::RangeInclusive;
     use std::{collections::BTreeSet, fmt, iter::FromIterator};
+    use iroha_introspect::{derive::Introspect, Introspect};
 
     //TODO: get rid of it?
     use iroha_crypto::prelude::*;
@@ -716,7 +713,7 @@ pub mod account {
     }
 
     /// Account entity is an authority which is used to execute `Iroha Special Instructions`.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
+    #[derive(Introspect, Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
     pub struct Account {
         /// An Identification of the `Account`.
         pub id: Id,
@@ -734,6 +731,12 @@ pub mod account {
         /// Roles of this account, they are tags for sets of permissions stored in [`World`].
         #[cfg(feature = "roles")]
         pub roles: HashSet<RoleId>,
+    }
+
+    #[test]
+    fn foo() {
+        let acc : Account = NewAccount::new(Id::new("foo", "bar")).into();
+        Account::introspect()
     }
 
     impl PartialOrd for Account {

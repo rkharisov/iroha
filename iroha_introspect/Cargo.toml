@@ -6,4 +6,4 @@ edition = "2018"
 
 
 [dependencies]
-iroha_introspect_derive = { path = "iroha_introspect_derive" }
+iroha_introspect_derive = { path = "./iroha_introspect_derive" }

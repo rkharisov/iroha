@@ -1688,6 +1688,7 @@ dependencies = [
  "iroha_derive",
  "iroha_error",
  "iroha_http_server",
+ "iroha_introspect",
  "iroha_macro",
  "iroha_structs",
  "iroha_version",
@@ -1775,6 +1776,24 @@ dependencies = [
  "tracing",
  "tungstenite",
  "url",
+]
+
+[[package]]
+name = "iroha_introspect"
+version = "0.1.0"
+dependencies = [
+ "iroha_introspect_derive",
+]
+
+[[package]]
+name = "iroha_introspect_derive"
+version = "0.1.0"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+ "trybuild",
 ]
 
 [[package]]
