@@ -1,0 +1,9 @@
+[package]
+name = "iroha_introspect"
+version = "0.1.0"
+authors = ["rkharisov <rinat@soramitsu.co.jp>"]
+edition = "2018"
+
+
+[dependencies]
+iroha_introspect_derive = { path = "iroha_introspect_derive" }

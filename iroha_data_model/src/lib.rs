@@ -22,6 +22,13 @@ pub mod expression;
 pub mod isi;
 pub mod query;
 
+use iroha_introspect::{Introspect, derive::Introspect};
+
+#[test]
+fn foo() {
+
+}
+
 /// `Name` struct represents type for Iroha Entities names, like `Domain`'s name or `Account`'s
 /// name.
 pub type Name = String;
@@ -709,7 +716,7 @@ pub mod account {
     }
 
     /// Account entity is an authority which is used to execute `Iroha Special Instructions`.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
     pub struct Account {
         /// An Identification of the `Account`.
         pub id: Id,
