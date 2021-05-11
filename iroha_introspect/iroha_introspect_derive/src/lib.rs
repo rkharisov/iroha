@@ -24,31 +24,23 @@ fn impl_introspect(input: &DeriveInput) -> TokenStream {
     let field_types = get_field_types(&input.data);
     let field_attrs = get_field_attrs(&input.data).join(" ### ");
 
-    let field : TokenStream2 = if let Some(field_type) = field_types.first() {
-        println!("******* {:?}", field_type);
-        quote! {
-            let zulu = <#field_type as core::default::Default>::default();
+    let mut field = quote! {};
+    for field_type in field_types {
+        field.extend( quote! {
             let bar = <#field_type as iroha_introspect::Introspect>::introspect();
-            // let bar = std::collections::BTreeSet::<String>::new();
-        }
-    } else {
-        quote! {
-            let bar = std::collections::BTreeSet::<String>::new();
-        }
+            result.extend(bar);
+        });
     };
 
     let output = quote! {
         impl iroha_introspect::Introspect for #name {
-            fn introspect() -> std::collections::BTreeSet<String> {
-            let mut result = std::collections::BTreeSet::new();
-            #field
-            result.extend(bar);
+            fn introspect() -> iroha_introspect::Metadata {
             // println!("body: {}", #body);
             // println!("docs: {:?}", #docs);
             // println!("field_names: {:?}", #field_names);
             // println!("field_types: {:?}", #field_types);
             // println!("field_attrs: {:?}", #field_attrs);
-            return result;
+            return iroha_introspect::Metadata::BoolMetadata;
             }
         };
     };

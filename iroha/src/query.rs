@@ -16,6 +16,7 @@ use parity_scale_codec::{Decode, Encode};
 use iroha_introspect::{derive::Introspect, Introspect};
 
 use crate::prelude::*;
+use std::collections::BTreeSet;
 
 /// Query Request verified on the Iroha node side.
 #[derive(Debug, Io, Encode, Decode, Introspect)]
