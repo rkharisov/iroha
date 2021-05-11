@@ -13,11 +13,12 @@ use iroha_http_server::http::{
 };
 use iroha_version::{scale::DecodeVersioned, Version};
 use parity_scale_codec::{Decode, Encode};
+use iroha_introspect::{derive::Introspect, Introspect};
 
 use crate::prelude::*;
 
 /// Query Request verified on the Iroha node side.
-#[derive(Debug, Io, Encode, Decode)]
+#[derive(Debug, Io, Encode, Decode, Introspect)]
 #[non_exhaustive]
 pub struct VerifiedQueryRequest {
     /// Timestamp of the query creation.
@@ -27,6 +28,11 @@ pub struct VerifiedQueryRequest {
     pub signature: Signature,
     /// Query definition.
     pub query: QueryBox,
+}
+
+#[test]
+fn foo() {
+    VerifiedQueryRequest::introspect();
 }
 
 /// This trait should be implemented for all Iroha Queries.

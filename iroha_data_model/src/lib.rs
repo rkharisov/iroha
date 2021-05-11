@@ -713,7 +713,7 @@ pub mod account {
     }
 
     /// Account entity is an authority which is used to execute `Iroha Special Instructions`.
-    #[derive(Introspect, Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
     pub struct Account {
         /// An Identification of the `Account`.
         pub id: Id,
@@ -735,8 +735,8 @@ pub mod account {
 
     #[test]
     fn foo() {
-        let acc : Account = NewAccount::new(Id::new("foo", "bar")).into();
-        Account::introspect()
+        // let acc : Account = NewAccount::new(Id::new("foo", "bar")).into();
+        // Account::introspect()
     }
 
     impl PartialOrd for Account {
@@ -943,6 +943,13 @@ pub mod asset {
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
 
+    use iroha_introspect::{derive::Introspect, Introspect};
+
+    #[test]
+    fn foo() {
+        AssetValue::introspect()
+    }
+
     use crate::{
         account::prelude::*,
         metadata::{Limits as MetadataLimits, Metadata},
@@ -1037,7 +1044,7 @@ pub mod asset {
 
     /// Asset's inner value.
     #[derive(
-        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant,
+        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant, Introspect
     )]
     pub enum AssetValue {
         /// Asset's Quantity.

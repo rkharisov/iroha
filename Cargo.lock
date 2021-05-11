@@ -1568,6 +1568,7 @@ dependencies = [
  "iroha_derive",
  "iroha_error",
  "iroha_http_server",
+ "iroha_introspect",
  "iroha_logger",
  "iroha_macro",
  "iroha_network",
