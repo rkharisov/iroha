@@ -548,7 +548,6 @@ pub mod account {
 
     use std::ops::RangeInclusive;
     use std::{collections::BTreeSet, fmt, iter::FromIterator};
-    use iroha_introspect::{derive::Introspect, Introspect};
 
     //TODO: get rid of it?
     use iroha_crypto::prelude::*;
@@ -943,8 +942,6 @@ pub mod asset {
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
 
-    use iroha_introspect::{derive::Introspect, Introspect};
-
     #[test]
     fn foo() {
         AssetValue::introspect()
@@ -1044,7 +1041,7 @@ pub mod asset {
 
     /// Asset's inner value.
     #[derive(
-        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant, Introspect
+        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant
     )]
     pub enum AssetValue {
         /// Asset's Quantity.
