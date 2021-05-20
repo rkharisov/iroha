@@ -23,4 +23,6 @@ members = [
   "iroha_actor",
   "iroha_actor/actor_derive",
   "iroha/docs",
+  "iroha_introspect",
+  "iroha_introspect/iroha_introspect_derive",
 ]

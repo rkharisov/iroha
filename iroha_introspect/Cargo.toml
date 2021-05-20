@@ -1,0 +1,18 @@
+[package]
+name = "iroha_introspect"
+version = "0.1.0"
+authors = ["rkharisov <rinat@soramitsu.co.jp>"]
+edition = "2018"
+
+[[test]]
+name = "tests"
+path = "tests/_progress.rs"
+
+[dev-dependencies]
+trybuild = { version = "1.0", features = ["diff"] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+parity-scale-codec = { version = "2", features = ["derive"] }
+introspect_derive = { path = "iroha_introspect_derive" }
