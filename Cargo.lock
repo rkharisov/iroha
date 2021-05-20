@@ -1474,16 +1474,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b33c9a5c599d67d051c4dc25eb1b6b4ef715d1763c20c85c688717a1734f204e"
 
 [[package]]
-name = "introspect_derive"
-version = "0.0.0"
-dependencies = [
- "parity-scale-codec",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "iroha"
 version = "0.1.0"
 dependencies = [
@@ -1729,11 +1719,21 @@ dependencies = [
 name = "iroha_introspect"
 version = "0.1.0"
 dependencies = [
- "introspect_derive",
+ "iroha_introspect_derive",
  "parity-scale-codec",
  "serde",
  "serde_json",
  "trybuild",
+]
+
+[[package]]
+name = "iroha_introspect_derive"
+version = "0.0.0"
+dependencies = [
+ "parity-scale-codec",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

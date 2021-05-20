@@ -1,5 +1,5 @@
-use introspect::*;
-use introspect_derive::Introspect;
+use iroha_introspect::prelude::*;
+
 use parity_scale_codec::{Decode, Encode};
 
 #[derive(Introspect, Encode, Decode)]

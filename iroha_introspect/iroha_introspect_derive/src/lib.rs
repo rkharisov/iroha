@@ -8,7 +8,7 @@ use syn::parse::Parse;
 use syn::spanned::Spanned;
 
 #[proc_macro_derive(Introspect)]
-pub fn introspect(input: TokenStream) -> TokenStream {
+pub fn introspect_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     impl_introspect(input)
 }
@@ -18,7 +18,7 @@ fn impl_introspect(input: DeriveInput) -> TokenStream {
     let metadata = metadata(&input);
 
     let expanded = quote! {
-        impl Introspect for #name {
+        impl iroha_introspect::Introspect for #name {
             fn introspect() -> Metadata {
                #metadata
             }
@@ -93,7 +93,7 @@ fn declarations<'a> (fields: impl Iterator<Item = &'a Field>) -> TokenStream2 {
                     )
                 }
             } else {
-                quote! {<#prop_type as introspect::Introspect>::introspect()}
+                quote! {<#prop_type as iroha_introspect::Introspect>::introspect()}
             };
             //skip if #[codec(skip)] used
             if should_skip(&f.attrs) {

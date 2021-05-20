@@ -1,7 +1,7 @@
 use parity_scale_codec::{Decode, Encode};
 
-use introspect::*;
-use introspect_derive::Introspect;
+use iroha_introspect::prelude::*;
+
 
 #[derive(Introspect, Encode, Decode)]
 struct Command(String, Vec<String>, #[codec(skip)] bool);
