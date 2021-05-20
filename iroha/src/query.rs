@@ -32,7 +32,8 @@ pub struct VerifiedQueryRequest {
 
 #[test]
 fn foo() {
-    VerifiedQueryRequest::introspect();
+    let i = VerifiedQueryRequest::introspect();
+    println!("{:?}", i)
 }
 
 /// This trait should be implemented for all Iroha Queries.

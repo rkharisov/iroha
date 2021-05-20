@@ -1789,6 +1789,7 @@ dependencies = [
 name = "iroha_introspect_derive"
 version = "0.1.0"
 dependencies = [
+ "iroha_introspect",
  "proc-macro-error",
  "proc-macro2",
  "quote",

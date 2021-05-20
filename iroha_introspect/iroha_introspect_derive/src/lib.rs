@@ -6,12 +6,34 @@ use syn::{Attribute, Data, DataEnum, DataStruct, DeriveInput, Fields, FieldsName
 use syn::__private::TokenStream2;
 use std::collections::BTreeSet;
 use proc_macro2::Ident;
+use iroha_introspect::Declaration;
 
 //todo тесты
 #[proc_macro_derive(Introspect)]
 pub fn introspect_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     impl_introspect(&input)
+}
+
+fn introspect_enum(ident: &Ident, attrs: &Vec<Attribute>, data_enum: &DataEnum) -> TokenStream2 {
+    quote! {
+        {
+            // let struct_meta = iroha_introspect::StructMeta::new(#ident, )
+            // return iroha_introspect::Metadata::StructMetadata(struct_meta);
+                   iroha_introspect::Metadata::BoolMetadata
+
+        }
+    }
+}
+
+fn get_declarations() -> Vec<Declaration> {
+    Vec::new()
+}
+
+fn introspect_struct(ident: &Ident, attrs: &Vec<Attribute>, data_struct: &DataStruct) -> TokenStream2 {
+    quote! {
+       iroha_introspect::Metadata::BoolMetadata
+    }
 }
 
 //todo define attributes
@@ -24,23 +46,31 @@ fn impl_introspect(input: &DeriveInput) -> TokenStream {
     let field_types = get_field_types(&input.data);
     let field_attrs = get_field_attrs(&input.data).join(" ### ");
 
-    let mut field = quote! {};
-    for field_type in field_types {
-        field.extend( quote! {
-            let bar = <#field_type as iroha_introspect::Introspect>::introspect();
-            result.extend(bar);
-        });
+    let ident = &input.ident;
+    let attrs = &input.attrs;
+    let data = match &input.data {
+        Data::Struct(value) => introspect_struct(ident, attrs, value),
+        Data::Enum(value) => introspect_enum(ident, attrs, value),
+        Data::Union(_) => unimplemented!(),
     };
+    // let mut field = quote! {};
+    // for field_type in field_types {
+    //     field.extend( quote! {
+    //         let bar = <#field_type as iroha_introspect::Introspect>::introspect();
+    //         result.extend(bar);
+    //     });
+    // };
 
     let output = quote! {
         impl iroha_introspect::Introspect for #name {
             fn introspect() -> iroha_introspect::Metadata {
+            #data
             // println!("body: {}", #body);
             // println!("docs: {:?}", #docs);
             // println!("field_names: {:?}", #field_names);
             // println!("field_types: {:?}", #field_types);
             // println!("field_attrs: {:?}", #field_attrs);
-            return iroha_introspect::Metadata::BoolMetadata;
+            // return iroha_introspect::Metadata::BoolMetadata;
             }
         };
     };

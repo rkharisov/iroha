@@ -4,6 +4,9 @@ version = "0.1.0"
 authors = ["rkharisov <rinat@soramitsu.co.jp>"]
 edition = "2018"
 
+[features]
+default = ["derive"]
+derive = ["iroha_introspect_derive"]
 
 [dependencies]
-iroha_introspect_derive = { path = "./iroha_introspect_derive" }
+iroha_introspect_derive = { path = "./iroha_introspect_derive" , optional = true}

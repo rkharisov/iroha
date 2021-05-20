@@ -15,3 +15,4 @@ proc-macro-error = "1.0"
 
 [dev-dependencies]
 trybuild = "1.0"
+iroha_introspect = { path = "../../iroha_introspect"}

@@ -1,10 +1,12 @@
 use std::collections::{HashSet, BTreeSet};
 
+#[cfg(feature = "derive")]
+pub use iroha_introspect_derive::*;
+
 //todo precommit hook
 pub mod derive {
-    pub use iroha_introspect_derive::Introspect;
 
-    use crate::Metadata::{BoolMetadata, OptionMetadata, ResultMetadata, TupleMetadata, VecMetadata};
+    use crate::Metadata::{BoolMetadata, OptionMetadata, ResultMetadata, TupleMetadata, VecMetadata, StructMetadata};
 
     use super::*;
 
@@ -138,35 +140,35 @@ pub struct TupleMeta {
 pub enum Declaration {
     IntDeclaration {
         //name of the property
-        name: String,
+        name: Option<String>,
         decl: IntMeta,
     },
     BoolDeclaration {
-        name: String,
+        name: Option<String>,
     },
     OptionDeclaration {
-        name: String,
+        name: Option<String>,
         decl: OptionMeta,
     },
     ResultDeclaration {
-        name: String,
+        name: Option<String>,
         decl: ResultMeta,
     },
     VecDeclaration {
-        name: String,
+        name: Option<String>,
         decl: VecMeta,
     },
     TupleDeclaration {
-        name: String,
+        name: Option<String>,
         decl: TupleMeta,
     },
     StructDeclaration {
-        name: String,
+        name: Option<String>,
         //name of the pub struct meta
         meta_ident: String,
     },
     EnumDeclaration {
-        name: String,
+        name: Option<String>,
         //name of the pub enum meta
         meta_ident: String,
     },
@@ -184,12 +186,20 @@ pub enum Codec {
     Scale,
     Json,
 }
+//todo how to define codec?
 #[derive(Debug)]
 pub struct StructMeta {
     ident: String,
-    codec: Codec,
     declarations: Vec<Declaration>,
     metas: HashSet<Box<Metadata>>,
+}
+
+impl StructMeta {
+    fn new(ident: String, declarations: Vec<Declaration>, metas: HashSet<Box<Metadata>>) -> Self {
+        StructMeta {
+            ident,  declarations, metas
+        }
+    }
 }
 #[derive(Debug)]
 pub struct EnumMeta {
