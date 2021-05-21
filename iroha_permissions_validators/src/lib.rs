@@ -1267,6 +1267,8 @@ pub mod public_blockchain {
 
         #[test]
         fn transfer_granted_assets() {
+
+
             let alice_id = <Account as Identifiable>::Id::new("alice", "test");
             let bob_id = <Account as Identifiable>::Id::new("bob", "test");
             let alice_xor_id =
@@ -1274,12 +1276,15 @@ pub mod public_blockchain {
             let bob_xor_id = <Asset as Identifiable>::Id::from_names("xor", "test", "bob", "test");
             let mut domain = Domain::new("test");
             let mut bob_account = Account::new(bob_id.clone());
-            let _ = bob_account.permission_tokens.insert(PermissionToken::new(
+            let foo = PermissionToken::new(
                 transfer::CAN_TRANSFER_USER_ASSETS_TOKEN,
                 btreemap! {
                     ASSET_ID_TOKEN_PARAM_NAME.to_string() => alice_xor_id.clone().into(),
                 },
-            ));
+            );
+            println!("{:#?}")
+
+            let _ = bob_account.permission_tokens.insert(foo);
             drop(domain.accounts.insert(bob_id.clone(), bob_account));
             let domains = vec![("test".to_string(), domain)];
             let wsv = WorldStateView::new(World::with(domains, BTreeSet::new()));

@@ -17,6 +17,7 @@ pub enum Metadata {
     Vec(SingleContainer),
     Option(SingleContainer),
     Result(ResultMeta),
+    Bin
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]

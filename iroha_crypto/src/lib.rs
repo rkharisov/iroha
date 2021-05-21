@@ -88,7 +88,7 @@ impl AsRef<[u8]> for Hash {
 }
 impl Introspect for Hash {
     fn introspect() -> Metadata {
-        todo!()
+       Metadata::Bin
     }
 }
 
