@@ -11,11 +11,12 @@ use std::fmt::Debug;
 use iroha_derive::FromVariant;
 use parity_scale_codec::{Decode, Encode};
 use serde::{Deserialize, Serialize};
+use iroha_introspect::prelude::*;
 
 use super::{expression::EvaluatesTo, prelude::*, IdBox, IdentifiableBox, Value, ValueMarker};
 
 /// Sized structure for all possible Instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, FromVariant)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, FromVariant, Introspect)]
 pub enum Instruction {
     /// `Register` variant.
     Register(RegisterBox),
@@ -66,7 +67,7 @@ impl Instruction {
 }
 
 /// Sized structure for all possible key value set instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct SetKeyValueBox {
     /// Where to set this key value.
     pub object_id: EvaluatesTo<IdBox>,
@@ -77,7 +78,7 @@ pub struct SetKeyValueBox {
 }
 
 /// Sized structure for all possible key value pair remove instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct RemoveKeyValueBox {
     /// From where to remove this key value.
     pub object_id: EvaluatesTo<IdBox>,
@@ -86,28 +87,28 @@ pub struct RemoveKeyValueBox {
 }
 
 /// Sized structure for all possible Sets.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct SetBox {
     /// Object to set as a value.
     pub object: EvaluatesTo<Value>,
 }
 
 /// Sized structure for all possible Registers.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct RegisterBox {
     /// The object that should be registered, should be uniquely identifiable by its id.
     pub object: EvaluatesTo<IdentifiableBox>,
 }
 
 /// Sized structure for all possible Unregisters.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct UnregisterBox {
     /// The id of the object that should be unregistered.
     pub object_id: EvaluatesTo<IdBox>,
 }
 
 /// Sized structure for all possible Mints.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct MintBox {
     /// Object to mint.
     pub object: EvaluatesTo<Value>,
@@ -116,7 +117,7 @@ pub struct MintBox {
 }
 
 /// Sized structure for all possible Burns.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct BurnBox {
     /// Object to burn.
     pub object: EvaluatesTo<Value>,
@@ -125,7 +126,7 @@ pub struct BurnBox {
 }
 
 /// Sized structure for all possible Transfers.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct TransferBox {
     /// Entity to transfer from.
     pub source_id: EvaluatesTo<IdBox>,
@@ -136,7 +137,7 @@ pub struct TransferBox {
 }
 
 /// Composite instruction for a pair of instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct Pair {
     /// Left instruction
     pub left_instruction: Instruction,
@@ -145,14 +146,14 @@ pub struct Pair {
 }
 
 /// Composite instruction for a sequence of instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct SequenceBox {
     /// Sequence of Iroha Special Instructions to execute.
     pub instructions: Vec<Instruction>,
 }
 
 /// Composite instruction for a conditional execution of other instructions.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct If {
     /// Condition to be checked.
     pub condition: EvaluatesTo<bool>,
@@ -163,14 +164,14 @@ pub struct If {
 }
 
 /// Utilitary instruction to fail execution and submit an error `message`.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct FailBox {
     /// Message to submit.
     pub message: String,
 }
 
 /// Sized structure for all possible Grants.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, Introspect,)]
 pub struct GrantBox {
     /// Object to grant.
     pub object: EvaluatesTo<Value>,
@@ -179,22 +180,22 @@ pub struct GrantBox {
 }
 
 /// Generic instruction to set value to the object.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Set<O>
 where
-    O: ValueMarker,
+    O: ValueMarker + Introspect,
 {
     /// Object to equate.
     pub object: O,
 }
 
 /// Generic instruction to set key value at the object.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct SetKeyValue<O, K, V>
 where
-    O: Identifiable,
-    K: ValueMarker,
-    V: ValueMarker,
+    O: Identifiable + Introspect,
+    K: ValueMarker + Introspect,
+    V: ValueMarker + Introspect,
 {
     /// Where to set key value.
     pub object_id: O::Id,
@@ -205,11 +206,11 @@ where
 }
 
 /// Generic instruction to remove key value at the object.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct RemoveKeyValue<O, K>
 where
-    O: Identifiable,
-    K: ValueMarker,
+    O: Identifiable + Introspect,
+    K: ValueMarker + Introspect,
 {
     /// From where to remove key value.
     pub object_id: O::Id,
@@ -218,31 +219,31 @@ where
 }
 
 /// Generic instruction for a registration of an object to the identifiable destination.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Register<O>
 where
-    O: Identifiable,
+    O: Identifiable + Introspect,
 {
     /// The object that should be registered, should be uniquely identifiable by its id.
     pub object: O,
 }
 
 /// Generic instruction for an unregistration of an object from the identifiable destination.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Unregister<O>
 where
-    O: Identifiable,
+    O: Identifiable + Introspect,
 {
     /// Id of the object which should be unregistered.
     pub object_id: O::Id,
 }
 
 /// Generic instruction for a mint of an object to the identifiable destination.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Mint<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Object which should be minted.
     pub object: O,
@@ -251,11 +252,11 @@ where
 }
 
 /// Generic instruction for a burn of an object to the identifiable destination.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Burn<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Object which should be burned.
     pub object: O,
@@ -264,10 +265,10 @@ where
 }
 
 /// Generic instruction for a transfer of an object from the identifiable source to the identifiable destination.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
-pub struct Transfer<S: Identifiable, O, D: Identifiable>
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect)]
+pub struct Transfer<S: Identifiable + Introspect, O, D: Identifiable + Introspect>
 where
-    O: ValueMarker,
+    O: ValueMarker + Introspect,
 {
     /// Source object `Id`.
     pub source_id: S::Id,
@@ -278,11 +279,11 @@ where
 }
 
 /// Generic instruction for granting permission to an entity.
-#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode, Introspect,)]
 pub struct Grant<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Object to grant.
     pub object: O,
@@ -292,9 +293,9 @@ where
 
 impl<O, K, V> SetKeyValue<O, K, V>
 where
-    O: Identifiable,
-    K: ValueMarker,
-    V: ValueMarker,
+    O: Identifiable + Introspect,
+    K: ValueMarker + Introspect,
+    V: ValueMarker + Introspect,
 {
     /// Default [`SetKeyValue`] constructor.
     pub fn new(object_id: O::Id, key: K, value: V) -> Self {
@@ -308,8 +309,8 @@ where
 
 impl<O, K> RemoveKeyValue<O, K>
 where
-    O: Identifiable,
-    K: ValueMarker,
+    O: Identifiable + Introspect,
+    K: ValueMarker + Introspect,
 {
     /// Default [`RemoveKeyValue`] constructor.
     pub fn new(object_id: O::Id, key: K) -> Self {
@@ -319,7 +320,7 @@ where
 
 impl<O> Set<O>
 where
-    O: ValueMarker,
+    O: ValueMarker + Introspect,
 {
     /// Default `Set` constructor.
     pub fn new(object: O) -> Self {
@@ -329,7 +330,7 @@ where
 
 impl<O> Register<O>
 where
-    O: Identifiable,
+    O: Identifiable + Introspect,
 {
     /// Default `Register` constructor.
     pub fn new(object: O) -> Self {
@@ -339,7 +340,7 @@ where
 
 impl<O> Unregister<O>
 where
-    O: Identifiable,
+    O: Identifiable + Introspect,
 {
     /// Default `Register` constructor.
     pub fn new(object_id: O::Id) -> Self {
@@ -349,8 +350,8 @@ where
 
 impl<D, O> Mint<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Default `Mint` constructor.
     pub fn new(object: O, destination_id: D::Id) -> Self {
@@ -363,8 +364,8 @@ where
 
 impl<D, O> Burn<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Default `Burn` constructor.
     pub fn new(object: O, destination_id: D::Id) -> Self {
@@ -377,9 +378,9 @@ where
 
 impl<S, O, D> Transfer<S, O, D>
 where
-    S: Identifiable,
-    D: Identifiable,
-    O: ValueMarker,
+    S: Identifiable + Introspect,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Default `Transfer` constructor.
     pub fn new(source_id: S::Id, object: O, destination_id: D::Id) -> Self {
@@ -393,8 +394,8 @@ where
 
 impl<D, O> Grant<D, O>
 where
-    D: Identifiable,
-    O: ValueMarker,
+    D: Identifiable + Introspect,
+    O: ValueMarker + Introspect,
 {
     /// Constructor.
     pub fn new(object: O, destination_id: D::Id) -> Self {

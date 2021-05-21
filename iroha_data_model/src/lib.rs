@@ -315,7 +315,7 @@ impl<V: Into<Value> + Debug + Clone> ValueMarker for V {}
 /// This trait marks entity that implement it as identifiable with an `Id` type to find them by.
 pub trait Identifiable: Debug + Clone {
     /// Defines the type of entity's identification.
-    type Id: Into<IdBox> + Debug + Clone + Eq + Ord;
+    type Id: Into<IdBox> + Debug + Clone + Eq + Ord + Introspect;
 }
 
 /// Limits of length of the identifiers (e.g. in [`Domain`], [`NewAccount`], [`AssetDefinition`]) in bytes
@@ -342,6 +342,7 @@ impl From<LengthLimits> for RangeInclusive<usize> {
 
 pub mod world {
     //! Structures, traits and impls related to `World`.
+    use iroha_introspect::prelude::*;
 
     #[cfg(feature = "roles")]
     use crate::role::RolesMap;
@@ -391,7 +392,7 @@ pub mod world {
     }
 
     /// The ID of the `World`. The `World` has only a single instance, therefore the ID has no fields.
-    #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Copy)]
+    #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Copy, Introspect)]
     pub struct WorldId;
 
     impl From<WorldId> for IdBox {
@@ -946,7 +947,7 @@ pub mod asset {
     pub type AssetDefinitionsMap = BTreeMap<DefinitionId, AssetDefinitionEntry>;
 
     /// An entry in `AssetDefinitionsMap`.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
     pub struct AssetDefinitionEntry {
         /// Asset definition.
         pub definition: AssetDefinition,
@@ -1014,6 +1015,7 @@ pub mod asset {
         Io,
         Encode,
         Decode,
+    Introspect,
     )]
     pub enum AssetValueType {
         /// Asset's Quantity.
@@ -1026,7 +1028,7 @@ pub mod asset {
 
     /// Asset's inner value.
     #[derive(
-        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant,
+        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, FromVariant, Introspect,
     )]
     pub enum AssetValue {
         /// Asset's Quantity.
@@ -1841,7 +1843,7 @@ pub mod transaction {
 
     /// Represents a collection of transactions that the peer sends to describe its pending transactions in a queue.
     #[version_with_scale(n = 1, versioned = "VersionedPendingTransactions")]
-    #[derive(Debug, Clone, Encode, Decode, Io)]
+    #[derive(Debug, Clone, Encode, Decode, Io, Introspect)]
     pub struct PendingTransactions(pub Vec<Transaction>);
 
     impl FromIterator<Transaction> for PendingTransactions {
@@ -1973,7 +1975,7 @@ pub mod transaction {
 
     /// [`RejectedTransaction`] represents transaction rejected by some validator at some stage of the pipeline.
     #[version(n = 1, versioned = "VersionedRejectedTransaction")]
-    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq)]
+    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq, Introspect)]
     pub struct RejectedTransaction {
         /// `Transaction` payload.
         pub payload: Payload,

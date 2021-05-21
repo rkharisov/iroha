@@ -6,4 +6,5 @@ fn tests() {
     t.pass("tests/enum_with_default_discriminants.rs");
     t.pass("tests/enum_with_various_discriminants.rs");
     t.pass("tests/numbers_compact_and_fixed.rs");
+    t.pass("tests/struct_with_generic_bounds.rs");
 }

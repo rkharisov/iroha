@@ -27,7 +27,7 @@ pub type Context = BTreeMap<ValueName, Value>;
 pub type ExpressionBox = Box<Expression>;
 
 /// Struct for type checking and converting expression results.
-#[derive(Debug, Clone, Encode, Decode, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Introspect)]
+#[derive(Debug, Clone, Encode, Decode, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct EvaluatesTo<V: TryFrom<Value>> {
     /// Expression.
     #[serde(flatten)]

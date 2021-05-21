@@ -48,7 +48,7 @@ pub const BLS_SMALL: &str = "bls_small";
 
 /// Represents hash of Iroha entities like `Block` or `Transaction`. Currently supports only blake2b-32.
 #[derive(
-    Eq, PartialEq, Clone, Encode, Decode, Serialize, Deserialize, Ord, PartialOrd, Copy, Hash,
+    Eq, PartialEq, Clone, Encode, Decode, Serialize, Deserialize, Ord, PartialOrd, Copy, Hash
 )]
 pub struct Hash(pub [u8; HASH_LENGTH]);
 
@@ -84,6 +84,11 @@ impl AsRef<[u8]> for Hash {
     fn as_ref(&self) -> &[u8] {
         let Hash(bytes) = self;
         bytes
+    }
+}
+impl Introspect for Hash {
+    fn introspect() -> Metadata {
+        todo!()
     }
 }
 

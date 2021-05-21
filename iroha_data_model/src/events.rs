@@ -15,7 +15,7 @@ declare_versioned_with_json!(VersionedSubscriptionRequest 1..2);
 //TODO: Sign request?
 /// Subscription Request to listen to events
 #[version_with_json(n = 1, versioned = "VersionedSubscriptionRequest")]
-#[derive(Debug, Serialize, Deserialize, Copy, Clone)]
+#[derive(Debug, Serialize, Deserialize, Copy, Clone, Introspect,)]
 pub struct SubscriptionRequest(pub EventFilter);
 
 declare_versioned_with_json!(VersionedEventReceived 1..2);
@@ -23,7 +23,7 @@ declare_versioned_with_json!(VersionedEventReceived 1..2);
 // TODO: Sign receipt?
 /// Event receipt.
 #[version_with_json(n = 1, versioned = "VersionedEventReceived")]
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, Introspect,)]
 pub struct EventReceived;
 
 declare_versioned_with_json!(VersionedEvent 1..2);
@@ -54,7 +54,7 @@ impl VersionedEvent {
 
 /// Event.
 #[version_with_json(n = 1, versioned = "VersionedEvent")]
-#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, FromVariant)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, FromVariant, Introspect,)]
 pub enum Event {
     /// Pipeline event.
     Pipeline(pipeline::Event),
@@ -63,7 +63,7 @@ pub enum Event {
 }
 
 /// Event filter.
-#[derive(Debug, Serialize, Deserialize, Clone, Copy, FromVariant)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, FromVariant, Introspect,)]
 pub enum EventFilter {
     /// Listen to pipeline events with filter.
     Pipeline(pipeline::EventFilter),
@@ -86,6 +86,8 @@ impl EventFilter {
 pub mod data {
     use iroha_derive::FromVariant;
     use serde::{Deserialize, Serialize};
+
+    use iroha_introspect::prelude::*;
 
     use crate::prelude::*;
 
@@ -146,7 +148,7 @@ pub mod data {
 
     //TODO: implement filter for data entities
     /// Event filter.
-    #[derive(Debug, Serialize, Deserialize, Copy, Clone)]
+    #[derive(Debug, Serialize, Deserialize, Copy, Clone, Introspect,)]
     pub struct EventFilter;
 
     impl EventFilter {
@@ -158,7 +160,7 @@ pub mod data {
 
     //TODO: implement event for data entities
     /// Event.
-    #[derive(Debug, Serialize, Deserialize, Copy, Clone, Eq, PartialEq)]
+    #[derive(Debug, Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Introspect)]
     pub struct Event;
 
     /// Exports common structs and enums from this module.
@@ -176,7 +178,7 @@ pub mod pipeline {
         error::Error as StdError,
         fmt::{Display, Formatter, Result as FmtResult},
     };
-
+    use iroha_introspect::prelude::*;
     use iroha_crypto::{Hash, Signature};
     use iroha_derive::FromVariant;
     use iroha_error::derive::Error;
@@ -186,7 +188,7 @@ pub mod pipeline {
     use crate::isi::Instruction;
 
     /// Event filter.
-    #[derive(Debug, Serialize, Deserialize, Copy, Clone)]
+    #[derive(Debug, Serialize, Deserialize, Copy, Clone, Introspect,)]
     pub struct EventFilter {
         /// Filter by Entity if `Some`, if `None` all entities are accepted.
         pub entity: Option<EntityType>,
@@ -238,7 +240,7 @@ pub mod pipeline {
     }
 
     /// Entity type to filter events.
-    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Copy, Clone)]
+    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Copy, Clone, Introspect,)]
     pub enum EntityType {
         /// Block.
         Block,
@@ -247,7 +249,7 @@ pub mod pipeline {
     }
 
     /// Transaction was reject during verification of signature
-    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode)]
+    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, Introspect,)]
     pub struct SignatureVerificationFail {
         /// Signature which verification has failed
         pub signature: Signature,
@@ -268,7 +270,7 @@ pub mod pipeline {
     impl StdError for SignatureVerificationFail {}
 
     /// Transaction was reject because it doesn't satisfy signature condition
-    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode)]
+    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, Introspect,)]
     pub struct UnsatisfiedSignatureConditionFail {
         /// Reason why signature condition failed
         pub reason: String,
@@ -287,7 +289,7 @@ pub mod pipeline {
     impl StdError for UnsatisfiedSignatureConditionFail {}
 
     /// Transaction was rejected because of one of its instructions failing.
-    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode)]
+    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, Introspect,)]
     pub struct InstructionExecutionFail {
         /// Instruction which execution failed
         pub instruction: Instruction,
@@ -322,7 +324,7 @@ pub mod pipeline {
     impl StdError for InstructionExecutionFail {}
 
     /// Transaction was reject because of low authority
-    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode)]
+    #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, Introspect,)]
     pub struct NotPermittedFail {
         /// Reason of failure
         pub reason: String,
@@ -349,6 +351,7 @@ pub mod pipeline {
         Encode,
         FromVariant,
         Error,
+        Introspect
     )]
     pub enum BlockRejectionReason {
         /// Block was rejected during consensus.
@@ -359,7 +362,7 @@ pub mod pipeline {
 
     /// The reason for rejecting transaction which happened because of transaction.
     #[derive(
-        Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, FromVariant, Error,
+        Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, FromVariant, Error, Introspect,
     )]
     pub enum TransactionRejectionReason {
         /// Failed due to low authority.
@@ -381,7 +384,7 @@ pub mod pipeline {
 
     /// The reason for rejecting pipeline entity such as transaction or block.
     #[derive(
-        Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, FromVariant, Error,
+        Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Decode, Encode, FromVariant, Error, Introspect
     )]
     pub enum RejectionReason {
         /// The reason for rejecting the block.
@@ -393,7 +396,7 @@ pub mod pipeline {
     }
 
     /// Entity type to filter events.
-    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone)]
+    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, Introspect,)]
     pub struct Event {
         /// Type of entity that caused this event.
         pub entity_type: EntityType,
@@ -415,7 +418,7 @@ pub mod pipeline {
     }
 
     /// Entity type to filter events.
-    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, FromVariant)]
+    #[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Clone, FromVariant, Introspect)]
     pub enum Status {
         /// Entity has been seen in blockchain, but has not passed validation.
         Validating,

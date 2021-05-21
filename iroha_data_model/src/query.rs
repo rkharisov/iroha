@@ -101,7 +101,7 @@ declare_versioned_with_scale!(VersionedSignedQueryRequest 1..2);
 
 /// I/O ready structure to send queries.
 #[version_with_scale(n = 1, versioned = "VersionedSignedQueryRequest")]
-#[derive(Debug, Clone, Io, Encode, Decode)]
+#[derive(Debug, Clone, Io, Encode, Decode, Introspect)]
 pub struct SignedQueryRequest {
     /// Timestamp of the query creation.
     #[codec(compact)]
@@ -116,7 +116,7 @@ declare_versioned_with_scale!(VersionedQueryResult 1..2);
 
 /// Sized container for all possible Query results.
 #[version_with_scale(n = 1, versioned = "VersionedQueryResult")]
-#[derive(Debug, Clone, Io, Serialize, Deserialize, Encode, Decode)]
+#[derive(Debug, Clone, Io, Serialize, Deserialize, Encode, Decode, Introspect)]
 pub struct QueryResult(pub Value);
 
 #[cfg(feature = "http_error")]
@@ -416,6 +416,7 @@ pub mod asset {
         Eq,
         PartialOrd,
         Ord,
+    Introspect,
     )]
     pub struct FindAllAssetsDefinitions {}
 

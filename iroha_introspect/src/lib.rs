@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use iroha_introspect_derive::Introspect;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub trait Introspect {
     fn introspect() -> Metadata;
@@ -107,7 +107,14 @@ impl<T, E> Introspect for Result<T, E> where T: Introspect, E: Introspect {
 
 impl<K, V> Introspect for BTreeMap<K, V> where K : Introspect, V: Introspect {
     fn introspect() -> Metadata {
-        todo!()
+       //todo finish me
+        Metadata::String
+    }
+}
+
+impl<V> Introspect for BTreeSet<V> where V: Introspect {
+    fn introspect() -> Metadata {
+        Metadata::Vec(SingleContainer { item: Box::new(V::introspect()) })
     }
 }
 

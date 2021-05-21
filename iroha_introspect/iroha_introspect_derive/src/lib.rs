@@ -3,7 +3,7 @@ use proc_macro::TokenStream;
 use proc_macro2::Ident;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
-use syn::{Data, DataEnum, DataStruct, DeriveInput, Fields, parse_macro_input, Field, Attribute, NestedMeta, Meta, Variant, Lit};
+use syn::{Data, DataEnum, DataStruct, DeriveInput, Fields, parse_macro_input, Field, Attribute, NestedMeta, Meta, Variant, Lit, GenericParam, Generics};
 use syn::parse::Parse;
 use syn::spanned::Spanned;
 
@@ -16,9 +16,10 @@ pub fn introspect_derive(input: TokenStream) -> TokenStream {
 fn impl_introspect(input: DeriveInput) -> TokenStream {
     let name = &input.ident;
     let metadata = metadata(&input);
+    let (params, ident_params, where_clause) = generics(&input.generics);
 
     let expanded = quote! {
-        impl iroha_introspect::Introspect for #name {
+        impl #params iroha_introspect::Introspect for #name #ident_params #where_clause {
             fn introspect() -> iroha_introspect::Metadata {
                #metadata
             }
@@ -26,6 +27,37 @@ fn impl_introspect(input: DeriveInput) -> TokenStream {
     };
 
     TokenStream::from(expanded)
+}
+
+fn generics(generics: &Generics) -> (TokenStream2, TokenStream2, TokenStream2){
+    let Generics {
+        params,
+        where_clause,
+        ..
+    } = generics;
+    let ident_params = params.iter().map(generic_ident).collect::<Vec<_>>();
+    if params.is_empty() {
+        (quote! {}, quote! {}, quote! {})
+    } else {
+        (quote! { <#params> }, quote! { <#(#ident_params,)*> }, quote! { #where_clause })
+    }
+}
+
+fn generic_ident(param: &GenericParam) -> TokenStream2 {
+    match param {
+        GenericParam::Type(ty) => {
+            let ident = &ty.ident;
+            quote! { #ident }
+        }
+        GenericParam::Const(constgeneric) => {
+            let ident = &constgeneric.ident;
+            quote! { #ident }
+        }
+        GenericParam::Lifetime(lifetime) => {
+            let lifetime = &lifetime.lifetime;
+            quote! { #lifetime }
+        }
+    }
 }
 
 fn metadata(input: &DeriveInput) -> TokenStream2 {
