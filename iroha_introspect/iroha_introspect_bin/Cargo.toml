@@ -1,0 +1,10 @@
+[package]
+name = "iroha_introspect_bin"
+version = "0.1.0"
+authors = ["rkharisov <rinat@soramitsu.co.jp>"]
+edition = "2018"
+
+
+[dependencies]
+iroha_introspect = { path = "../../iroha_introspect" }
+iroha_data_model = { path = "../../iroha_data_model" }

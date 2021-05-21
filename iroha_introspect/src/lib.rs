@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use iroha_introspect_derive::Introspect;
+use std::collections::BTreeMap;
 
 pub trait Introspect {
     fn introspect() -> Metadata;
@@ -104,6 +105,12 @@ impl<T, E> Introspect for Result<T, E> where T: Introspect, E: Introspect {
     }
 }
 
+impl<K, V> Introspect for BTreeMap<K, V> where K : Introspect, V: Introspect {
+    fn introspect() -> Metadata {
+        todo!()
+    }
+}
+
 macro_rules! introspect_for_numerics {
         { $( $ty:ty ),* } => {
             $(
@@ -112,7 +119,6 @@ macro_rules! introspect_for_numerics {
                         Metadata::Int(IntMeta { mode: Mode::FixedWidth })
                     }
                 }
-
             )*
     };
 }

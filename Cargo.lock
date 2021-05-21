@@ -1597,6 +1597,7 @@ dependencies = [
  "hex",
  "hex-literal",
  "iroha_error",
+ "iroha_introspect",
  "parity-scale-codec",
  "serde",
  "serde_json",
@@ -1625,6 +1626,7 @@ dependencies = [
  "iroha_derive",
  "iroha_error",
  "iroha_http_server",
+ "iroha_introspect",
  "iroha_macro",
  "iroha_version",
  "parity-scale-codec",
@@ -1727,6 +1729,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "iroha_introspect_bin"
+version = "0.1.0"
+dependencies = [
+ "iroha_data_model",
+ "iroha_introspect",
+]
+
+[[package]]
 name = "iroha_introspect_derive"
 version = "0.0.0"
 dependencies = [
@@ -1794,6 +1804,7 @@ dependencies = [
  "iroha_derive",
  "iroha_error",
  "iroha_http_server",
+ "iroha_introspect",
  "iroha_macro",
  "iroha_version_derive",
  "parity-scale-codec",

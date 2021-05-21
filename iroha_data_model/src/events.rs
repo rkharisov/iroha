@@ -8,6 +8,7 @@
 use iroha_derive::FromVariant;
 use iroha_version::prelude::*;
 use serde::{Deserialize, Serialize};
+use iroha_introspect::prelude::*;
 
 declare_versioned_with_json!(VersionedSubscriptionRequest 1..2);
 

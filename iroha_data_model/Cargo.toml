@@ -35,3 +35,4 @@ parity-scale-codec = { version = "2", features = ["derive"] }
 serde_json = "1.0"
 async-std = { version = "1.6.2", features = ["unstable"] }
 dashmap = { version = "4.0" }
+iroha_introspect = { path = "../iroha_introspect"}

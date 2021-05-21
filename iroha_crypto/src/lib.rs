@@ -241,7 +241,7 @@ impl KeyPair {
 }
 
 /// Public Key used in signatures.
-#[derive(Encode, Decode, Ord, PartialEq, Eq, PartialOrd, Clone, Hash)]
+#[derive(Encode, Decode, Ord, PartialEq, Eq, PartialOrd, Clone, Hash, Introspect)]
 pub struct PublicKey {
     /// Digest function
     pub digest_function: String,
@@ -375,8 +375,10 @@ impl Display for PrivateKey {
     }
 }
 
+use iroha_introspect::prelude::*;
+
 /// Represents signature of the data (`Block` or `Transaction` for example).
-#[derive(Clone, Encode, Decode, Serialize, Deserialize, PartialOrd, Ord)]
+#[derive(Clone, Encode, Decode, Serialize, Deserialize, PartialOrd, Ord, Introspect)]
 pub struct Signature {
     /// Ed25519 (Edwards-curve Digital Signature Algorithm scheme using SHA-512 and Curve25519)
     /// public-key of an approved authority.

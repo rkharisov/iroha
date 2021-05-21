@@ -12,6 +12,7 @@ use iroha_error::Result;
 use iroha_macro::error::ErrorTryFromEnum;
 use parity_scale_codec::{Decode, Encode};
 use serde::{Deserialize, Serialize};
+use iroha_introspect::prelude::*;
 
 use crate::{
     account::SignatureCheckCondition, permissions::PermissionToken, transaction::TransactionValue,
@@ -51,7 +52,7 @@ pub trait TryAsRef<T> {
 
 /// Represents Iroha Configuration parameters.
 #[derive(
-    Copy, Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Encode, Decode, PartialOrd, Ord, Hash,
+    Copy, Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Encode, Decode, PartialOrd, Ord, Hash, Introspect
 )]
 pub enum Parameter {
     /// Maximum amount of Faulty Peers in the system.
@@ -77,6 +78,7 @@ pub enum Parameter {
     FromVariant,
     PartialOrd,
     Ord,
+    Introspect
 )]
 pub enum IdBox {
     /// `AccountId` variant.
@@ -109,6 +111,7 @@ pub enum IdBox {
     FromVariant,
     PartialOrd,
     Ord,
+    Introspect
 )]
 pub enum IdentifiableBox {
     /// `Account` variant.
@@ -146,6 +149,7 @@ pub type ValueBox = Box<Value>;
     FromVariant,
     PartialOrd,
     Ord,
+    Introspect
 )]
 #[allow(clippy::pub_enum_variant_names)]
 pub enum Value {
@@ -420,6 +424,7 @@ pub mod role {
         collections::BTreeSet,
         fmt::{Display, Formatter, Result as FmtResult},
     };
+    use iroha_introspect::prelude::*;
 
     use dashmap::DashMap;
     use parity_scale_codec::{Decode, Encode};
@@ -433,7 +438,7 @@ pub mod role {
 
     /// Identification of a role.
     #[derive(
-        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode, Hash,
+        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode, Hash, Introspect
     )]
     pub struct Id {
         /// Role name, should be unique .
@@ -467,7 +472,7 @@ pub mod role {
 
     /// Role is a tag for a set of permission tokens.
     #[derive(
-        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode,
+        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode, Introspect
     )]
     pub struct Role {
         /// Unique name of the role.
@@ -505,10 +510,11 @@ pub mod permissions {
     use serde::{Deserialize, Serialize};
 
     use crate::{Name, Value};
+    use iroha_introspect::prelude::*;
 
     /// Stored proof of the account having a permission for a certain action.
     #[derive(
-        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode,
+        Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Encode, Decode, Introspect
     )]
     pub struct PermissionToken {
         /// Name of the permission rule given to account.
@@ -543,6 +549,8 @@ pub mod account {
         iter::FromIterator,
         ops::RangeInclusive,
     };
+
+    use iroha_introspect::prelude::*;
 
     //TODO: get rid of it?
     use iroha_crypto::prelude::*;
@@ -599,7 +607,7 @@ pub mod account {
 
     /// Condition which checks if the account has the right signatures.
     #[derive(
-        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, PartialOrd, Ord,
+        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, PartialOrd, Ord, Introspect
     )]
     pub struct SignatureCheckCondition(pub EvaluatesTo<bool>);
 
@@ -632,7 +640,7 @@ pub mod account {
 
     /// Type which is used for registering `Account`
     #[derive(
-        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, PartialOrd, Ord,
+        Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, PartialOrd, Ord, Introspect
     )]
     pub struct NewAccount {
         /// An Identification of the `NewAccount`.
@@ -702,7 +710,7 @@ pub mod account {
     }
 
     /// Account entity is an authority which is used to execute `Iroha Special Instructions`.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
     pub struct Account {
         /// An Identification of the `Account`.
         pub id: Id,
@@ -756,6 +764,7 @@ pub mod account {
         Io,
         Encode,
         Decode,
+        Introspect
     )]
     pub struct Id {
         /// `Account`'s name.
@@ -916,6 +925,8 @@ pub mod asset {
         str::FromStr,
     };
 
+    use iroha_introspect::prelude::*;
+
     use iroha_derive::{FromVariant, Io};
     use iroha_error::{error, Error, Result};
     use parity_scale_codec::{Decode, Encode};
@@ -970,7 +981,7 @@ pub mod asset {
 
     /// Asset definition defines type of that asset.
     #[derive(
-        Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Io, Encode, Decode,
+        Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Io, Encode, Decode, Introspect
     )]
     pub struct AssetDefinition {
         /// Type of `AssetValue`
@@ -981,7 +992,7 @@ pub mod asset {
 
     /// Asset represents some sort of commodity or value.
     /// All possible variants of `Asset` entity's components.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
     pub struct Asset {
         /// Component Identification.
         pub id: Id,
@@ -1119,6 +1130,7 @@ pub mod asset {
         Encode,
         Decode,
         Hash,
+        Introspect
     )]
     pub struct DefinitionId {
         /// Asset's name.
@@ -1141,6 +1153,7 @@ pub mod asset {
         Encode,
         Decode,
         Hash,
+        Introspect
     )]
     pub struct Id {
         /// Entity Identification.
@@ -1376,6 +1389,7 @@ pub mod domain {
     use iroha_error::{error, Result};
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
+    use iroha_introspect::prelude::*;
 
     use crate::{
         account::{Account, AccountsMap, GenesisAccount},
@@ -1420,7 +1434,7 @@ pub mod domain {
     }
 
     /// Named group of `Account` and `Asset` entities.
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Io, Encode, Decode, Introspect)]
     pub struct Domain {
         /// Domain name, for example company name.
         pub name: Name,
@@ -1495,6 +1509,7 @@ pub mod peer {
     #![allow(clippy::missing_inline_in_public_items)]
 
     use std::iter::FromIterator;
+    use iroha_introspect::prelude::*;
 
     use dashmap::DashSet;
     use iroha_derive::Io;
@@ -1508,7 +1523,7 @@ pub mod peer {
 
     /// Peer represents Iroha instance.
     #[derive(
-        Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Io, Encode, Decode,
+        Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, Io, Encode, Decode, Introspect
     )]
     pub struct Peer {
         /// Peer Identification.
@@ -1529,6 +1544,7 @@ pub mod peer {
         Encode,
         Decode,
         Hash,
+        Introspect
     )]
     pub struct Id {
         /// Address of the Peer's entrypoint.
@@ -1596,6 +1612,7 @@ pub mod transaction {
         iroha_version::{error::Error as VersionError, scale::EncodeVersioned},
         std::collections::BTreeMap,
     };
+    use iroha_introspect::prelude::*;
 
     use crate::prelude::TransactionRejectionReason;
     use crate::{account::Account, isi::Instruction, metadata::UnlimitedMetadata, Identifiable};
@@ -1611,7 +1628,7 @@ pub mod transaction {
     /// Direct usage in business logic is strongly prohibited. Before any interactions
     /// `accept`.
     #[version(n = 1, versioned = "VersionedTransaction")]
-    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq)]
+    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq, Introspect)]
     pub struct Transaction {
         /// `Transaction` payload.
         pub payload: Payload,
@@ -1620,7 +1637,7 @@ pub mod transaction {
     }
 
     /// Iroha `Transaction` payload.
-    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq)]
+    #[derive(Clone, Debug, Io, Encode, Decode, Serialize, Deserialize, Eq, PartialEq, Introspect)]
     pub struct Payload {
         /// Account ID of transaction creator.
         pub account_id: <Account as Identifiable>::Id,
@@ -1845,7 +1862,7 @@ pub mod transaction {
     }
 
     /// Transaction Value used in Instructions and Queries
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Encode, Decode)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Encode, Decode, Introspect)]
     pub enum TransactionValue {
         /// Committed transaction
         Transaction(VersionedTransaction),
@@ -2227,6 +2244,7 @@ pub mod metadata {
     use iroha_error::{error, Result};
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
+    use iroha_introspect::prelude::*;
 
     use crate::{Name, Value};
 
@@ -2265,6 +2283,7 @@ pub mod metadata {
         Default,
         PartialOrd,
         Ord,
+        Introspect
     )]
     #[serde(transparent)]
     pub struct Metadata {

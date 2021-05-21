@@ -17,6 +17,7 @@ use serde::{Deserialize, Serialize};
 use self::role::*;
 use self::{account::*, asset::*, domain::*, peer::*, permissions::*, transaction::*};
 use crate::Value;
+use iroha_introspect::prelude::*;
 
 /// Sized container for all possible Queries.
 #[allow(clippy::pub_enum_variant_names)]
@@ -33,6 +34,7 @@ use crate::Value;
     FromVariant,
     PartialOrd,
     Ord,
+    Introspect
 )]
 pub enum QueryBox {
     /// `FindAllAccounts` variant.
@@ -183,6 +185,7 @@ pub mod role {
     use serde::{Deserialize, Serialize};
 
     use crate::prelude::*;
+    use iroha_introspect::prelude::*;
 
     /// `FindAllRoles` Iroha Query will find all `Roles`s presented.
     #[derive(
@@ -199,12 +202,13 @@ pub mod role {
         Eq,
         PartialOrd,
         Ord,
+    Introspect
     )]
     pub struct FindAllRoles {}
 
     /// `FindRolesByAccountId` Iroha Query will find an `Role`s for a specified account.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect
     )]
     pub struct FindRolesByAccountId {
         /// `Id` of an account to find.
@@ -225,10 +229,11 @@ pub mod permissions {
     use serde::{Deserialize, Serialize};
 
     use crate::prelude::*;
+    use iroha_introspect::prelude::*;
 
     /// `FindPermissionTokensByAccountId` Iroha Query will find an `Role`s for a specified account.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect
     )]
     pub struct FindPermissionTokensByAccountId {
         /// `Id` of an account to find.
@@ -247,6 +252,7 @@ pub mod account {
     use iroha_derive::Io;
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
+    use iroha_introspect::prelude::*;
 
     use crate::prelude::*;
 
@@ -266,12 +272,14 @@ pub mod account {
         Eq,
         PartialOrd,
         Ord,
+        Introspect,
     )]
     pub struct FindAllAccounts {}
 
     /// `FindAccountById` Iroha Query will find an `Account` by it's identification.
     #[derive(
         Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Introspect,
     )]
     pub struct FindAccountById {
         /// `Id` of an account to find.
@@ -281,7 +289,7 @@ pub mod account {
     /// `FindAccountById` Iroha Query will find a [`Value`] of the key-value metadata pair
     /// in the specified account.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAccountKeyValueByIdAndKey {
         /// `Id` of an account to find.
@@ -293,7 +301,7 @@ pub mod account {
     /// `FindAccountsByName` Iroha Query will get `Account`s name as input and
     /// find all `Account`s with this name.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAccountsByName {
         /// `name` of accounts to find.
@@ -303,7 +311,7 @@ pub mod account {
     /// `FindAccountsByDomainName` Iroha Query will get `Domain`s name as input and
     /// find all `Account`s under this `Domain`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAccountsByDomainName {
         /// `domain_name` under which accounts should be found.
@@ -372,6 +380,7 @@ pub mod asset {
     use serde::{Deserialize, Serialize};
 
     use crate::prelude::*;
+    use iroha_introspect::prelude::*;
 
     /// `FindAllAssets` Iroha Query will find all `Asset`s presented in Iroha Peer.
     #[derive(
@@ -387,7 +396,7 @@ pub mod asset {
         PartialEq,
         Eq,
         PartialOrd,
-        Ord,
+        Ord, Introspect,
     )]
     pub struct FindAllAssets {}
 
@@ -412,7 +421,7 @@ pub mod asset {
 
     /// `FindAssetById` Iroha Query will find an `Asset` by it's identification in Iroha `Peer`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetById {
         /// `Id` of an `Asset` to find.
@@ -422,7 +431,7 @@ pub mod asset {
     /// `FindAssetsByName` Iroha Query will get `Asset`s name as input and
     /// find all `Asset`s with it in Iroha `Peer`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByName {
         /// `Name` of `Asset`s to find.
@@ -432,7 +441,7 @@ pub mod asset {
     /// `FindAssetsByAccountId` Iroha Query will get `AccountId` as input and find all `Asset`s
     /// owned by the `Account` in Iroha Peer.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByAccountId {
         /// `AccountId` under which assets should be found.
@@ -442,7 +451,7 @@ pub mod asset {
     /// `FindAssetsByAssetDefinitionId` Iroha Query will get `AssetDefinitionId` as input and
     /// find all `Asset`s with this `AssetDefinition` in Iroha Peer.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByAssetDefinitionId {
         /// `AssetDefinitionId` with type of `Asset`s should be found.
@@ -452,7 +461,7 @@ pub mod asset {
     /// `FindAssetsByDomainName` Iroha Query will get `Domain`s name as input and
     /// find all `Asset`s under this `Domain` in Iroha `Peer`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByDomainName {
         /// `Name` of the domain under which assets should be found.
@@ -464,7 +473,7 @@ pub mod asset {
     /// `AssetDefinitionId` as inputs and find all `Asset`s owned by the `Account`
     /// with this `AssetDefinition` in Iroha Peer.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByAccountIdAndAssetDefinitionId {
         /// `AccountId` under which assets should be found.
@@ -477,7 +486,7 @@ pub mod asset {
     /// `AssetDefinitionId` as inputs and find all `Asset`s under the `Domain`
     /// with this `AssetDefinition` in Iroha `Peer`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetsByDomainNameAndAssetDefinitionId {
         /// `Name` of the domain under which assets should be found.
@@ -489,7 +498,7 @@ pub mod asset {
     /// `FindAssetQuantityById` Iroha Query will get `AssetId` as input and find `Asset::quantity`
     /// parameter's value if `Asset` is presented in Iroha Peer.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetQuantityById {
         /// `Id` of an `Asset` to find quantity of.
@@ -499,7 +508,7 @@ pub mod asset {
     /// `FindAssetQuantityById` Iroha Query will get `AssetId` and key as input and find [`Value`]
     /// of the key-value pair stored in this asset.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindAssetKeyValueByIdAndKey {
         /// `Id` of an `Asset` acting as `Store`.
@@ -632,6 +641,7 @@ pub mod domain {
     use serde::{Deserialize, Serialize};
 
     use crate::prelude::*;
+    use iroha_introspect::prelude::*;
 
     /// `FindAllDomains` Iroha Query will find all `Domain`s presented in Iroha `Peer`.
     #[derive(
@@ -648,12 +658,13 @@ pub mod domain {
         Eq,
         PartialOrd,
         Ord,
+        Introspect,
     )]
     pub struct FindAllDomains {}
 
     /// `FindDomainByName` Iroha Query will find a `Domain` by it's identification in Iroha `Peer`.
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect,
     )]
     pub struct FindDomainByName {
         /// Name of the domain to find.
@@ -687,6 +698,7 @@ pub mod peer {
     use iroha_derive::Io;
     use parity_scale_codec::{Decode, Encode};
     use serde::{Deserialize, Serialize};
+    use iroha_introspect::prelude::*;
 
     /// `FindAllPeers` Iroha Query will find all trusted `Peer`s presented in current Iroha `Peer`.
     #[derive(
@@ -703,6 +715,7 @@ pub mod peer {
         Eq,
         PartialOrd,
         Ord,
+        Introspect,
     )]
     pub struct FindAllPeers {}
 
@@ -721,6 +734,7 @@ pub mod peer {
         Eq,
         PartialOrd,
         Ord,
+        Introspect
     )]
     pub struct FindAllParameters {}
 
@@ -754,11 +768,12 @@ pub mod transaction {
 
     use crate::account::prelude::AccountId;
     use crate::expression::EvaluatesTo;
+    use iroha_introspect::prelude::*;
 
     /// `FindTransactionsByAccountId` Iroha Query will find all transaction included in blockchain
     /// for the account
     #[derive(
-        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord,
+        Clone, Debug, Io, Serialize, Deserialize, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Introspect
     )]
     pub struct FindTransactionsByAccountId {
         /// Signer's `AccountId` under which transactions should be found.

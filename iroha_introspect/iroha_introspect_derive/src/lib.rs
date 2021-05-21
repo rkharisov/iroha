@@ -19,7 +19,7 @@ fn impl_introspect(input: DeriveInput) -> TokenStream {
 
     let expanded = quote! {
         impl iroha_introspect::Introspect for #name {
-            fn introspect() -> Metadata {
+            fn introspect() -> iroha_introspect::Metadata {
                #metadata
             }
         }
@@ -41,8 +41,8 @@ fn metadata_for_structs(name: &Ident, data_struct: &DataStruct) -> TokenStream2 
     let name = name.to_string();
     let declarations = get_fields_declaration(&data_struct.fields);
     quote! {
-                Metadata::Struct(
-                    StructMeta {
+                iroha_introspect::Metadata::Struct(
+                    iroha_introspect::StructMeta {
                         ident: #name.into(),
                         declarations: #declarations,
                     }
@@ -58,13 +58,13 @@ fn metadata_for_enums(name: &Ident, data_enum: &DataEnum) -> TokenStream2 {
             let discriminant = variant_index(v, discriminant);
             let declarations = get_fields_declaration(&v.fields);
             quote! {
-                EnumVariant { name: #variant_name.into(), discriminant: #discriminant, declarations: #declarations},
+                iroha_introspect::EnumVariant { name: #variant_name.into(), discriminant: #discriminant, declarations: #declarations},
             }
         });
     let name = name.to_string();
     quote! {
-                Metadata::Enum(
-                    EnumMeta {
+                iroha_introspect::Metadata::Enum(
+                    iroha_introspect::EnumMeta {
                         ident: #name.into(),
                         variants: vec![#(#variants)*],
                     }
@@ -88,8 +88,8 @@ fn declarations<'a> (fields: impl Iterator<Item = &'a Field>) -> TokenStream2 {
             let prop_type = &f.ty;
             let definition = if is_compact(&f) {
                 quote! {
-                    Metadata::Int(
-                        IntMeta { mode: Mode::Compact }
+                    iroha_introspect::Metadata::Int(
+                        iroha_introspect::IntMeta { mode: iroha_introspect::Mode::Compact }
                     )
                 }
             } else {
@@ -100,7 +100,7 @@ fn declarations<'a> (fields: impl Iterator<Item = &'a Field>) -> TokenStream2 {
                 quote!{}
             } else {
                 quote! {
-                        Declaration {
+                        iroha_introspect::Declaration {
                             name: if #name_defined { Some(#prop_name.into()) } else { None },
                             definition: Box::new(#definition),
                         },

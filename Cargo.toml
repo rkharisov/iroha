@@ -25,4 +25,5 @@ members = [
   "iroha/docs",
   "iroha_introspect",
   "iroha_introspect/iroha_introspect_derive",
+  "iroha_introspect/iroha_introspect_bin",
 ]
