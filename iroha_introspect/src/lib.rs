@@ -17,13 +17,14 @@ pub enum Metadata {
     Vec(SingleContainer),
     Option(SingleContainer),
     Result(ResultMeta),
-    Bin
+    Map(MapMeta)
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct StructMeta {
     pub ident: String,
     pub declarations: Vec<Declaration>,
+    //todo add collection of properties meta defined in struct
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
@@ -42,12 +43,19 @@ pub struct EnumVariant {
     pub name: String,
     pub discriminant: u8,
     pub declarations: Vec<Declaration>,
+    //todo add collection of properties meta defined in enum variant
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct ResultMeta {
     pub ok: Box<Metadata>,
     pub err: Box<Metadata>,
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
+pub struct MapMeta {
+    pub key: Box<Metadata>,
+    pub value: Box<Metadata>,
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
@@ -64,6 +72,7 @@ pub enum Mode {
 #[derive(Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct Declaration {
     pub name: Option<String>,
+    //todo make string instead
     pub definition: Box<Metadata>,
 }
 
@@ -108,8 +117,10 @@ impl<T, E> Introspect for Result<T, E> where T: Introspect, E: Introspect {
 
 impl<K, V> Introspect for BTreeMap<K, V> where K : Introspect, V: Introspect {
     fn introspect() -> Metadata {
-       //todo finish me
-        Metadata::String
+        Metadata::Map(MapMeta {
+            key: Box::new(K::introspect()),
+            value: Box::new(V::introspect()),
+        })
     }
 }
 
@@ -131,10 +142,10 @@ macro_rules! introspect_for_numerics {
     };
 }
 
-introspect_for_numerics!(u8, u16, u32, u64, u128, i8, i16, i32, i64, i128);
+introspect_for_numerics!(u8, u16, u32, u64, u128);
 
 pub mod prelude {
-    //! Exports common types for permissions.
+    //! Exports common types.
 
     pub use super::*;
 }

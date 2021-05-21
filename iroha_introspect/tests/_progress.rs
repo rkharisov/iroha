@@ -1,5 +1,6 @@
 #[test]
 fn tests() {
+    //todo add tests cyclic reference does not cause described correct
     let t = trybuild::TestCases::new();
     t.pass("tests/struct_with_named_fields.rs");
     t.pass("tests/struct_with_unnamed_fields.rs");

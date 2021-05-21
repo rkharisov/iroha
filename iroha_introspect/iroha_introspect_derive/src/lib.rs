@@ -1,5 +1,3 @@
-#![recursion_limit = "10000"]
-
 use proc_macro::TokenStream;
 
 use proc_macro2::Ident;
@@ -20,11 +18,9 @@ fn impl_introspect(input: DeriveInput) -> TokenStream {
     let metadata = metadata(&input);
     let (params, ident_params, where_clause) = generics(&input.generics);
 
-   let foo = name.to_string();
     let expanded = quote! {
         impl #params iroha_introspect::Introspect for #name #ident_params #where_clause {
             fn introspect() -> iroha_introspect::Metadata {
-                println!("{}", #foo);
                #metadata
             }
         }
@@ -138,7 +134,7 @@ fn declarations<'a> (fields: impl Iterator<Item = &'a Field>) -> TokenStream2 {
                 quote! {
                         iroha_introspect::Declaration {
                             name: if #name_defined { Some(#prop_name.into()) } else { None },
-                            definition: Box::new(#definition),
+                            definition: "bool",
                         },
                     }
             }
