@@ -15,3 +15,4 @@ mod transfer_asset;
 mod tx_history;
 mod tx_rollback;
 mod unstable_network;
+mod tx_by_hash;
